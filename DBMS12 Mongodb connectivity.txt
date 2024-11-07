@@ -1,0 +1,153 @@
+Problem Statement: 
+
+Java and MongoDB connectivity.
+
+
+SOURCE CODE:
+
+Importjava.net.unknownHostException;
+Importjava.util.data;
+Importcom.mongodb.BasicDBObject;
+Importcom.mongodb.DB;
+Importcom.mongodb.DBCollection;
+Importcom.mongodb.DBCursor;
+Importcom.mongodb.MongoClient;
+Importcom.mongodb.MongoException;
+Publicclass Sample
+{
+publicstaticvoid main(String[] args){
+	try{
+
+/******************Connect to MongoDB*******?
+
+
+/*****Get database*****/
+//if database doesn’t exists MongoDB will create it for you
+DBdb=mongo.getDB(“testdb”);
+/**********Get collection/table from ‘testdb’******/
+//DBCollection table=db.getCollection(“user”);
+
+*********Insert******
+
+//create a document to store key and value
+BasicDBObject document=newBasicDBObject();
+document.put(“name”,”Rahul”);
+document.put(“age”,24);
+document.put(“createdDate”,newDate());
+table.insert(document);
+/*********Find and display********/
+BasicDBObjectsearchQuery=newBasicDBObject();
+searchQuery.put(“name”,”sahil”);
+DBCursor cursor=table.find(searchQuery);
+While(Cursor.hasNEXT(){
+System.out.println(cursor.next());
+}
+
+/****************Update***********************8/
+
+BasicDBObject query=new BasicObject();
+newDocument.put(“name”,”ajay”);
+BasicObjectupdateObj=new BasicObject();
+updateObj.put(“$set”,newDocument);
+table.update(query,updateObj);
+
+
+/******** Find and display********/
+BasicDBObject().append(“name”ajay”);
+DBCursor cursor2=table.find(searchQuery2);
+while(cursor2.hasNext()){
+
+}
+/******Done*****/
+System.out.println(“Done”);
+}
+Catch(UnknownHostException e){
+e.printStackTrace();
+}catch(MongoException e){
+}
+}
+}
+
+OUTPUT:
+
+*************************
+Loading class `com.mysql.jdbc.Driver'. This is deprecated. The new driver class is `com.mysql.cj.jdbc.Driver'. The driver is automatically registered via the SPI and manual loading of the driver class is generally unnecessary.
+*************************
+Enter Your choice 
+1 Insert
+2 Update
+3 Delete
+4 Display
+5 Exit
+
+1
+Enter Roll No
+1
+Enter Name
+Vijay
+Enter Your choice 
+1 Insert
+2 Update
+3 Delete
+4 Display
+5 Exit
+2
+Enter Roll No to update
+1
+Enter Name
+Om
+Record updated
+Enter Your choice 
+1 Insert
+2 Update
+3 Delete
+4 Display
+5 Exit
+4
+Roll No:1	Name:Om
+Roll No:20	Name:lmno
+Roll No:555	Name:gg
+Enter Your choice 
+1 Insert
+2 Update
+3 Delete
+4 Display
+5 Exit
+
+2
+Enter Roll No to update
+20
+Enter Name
+Vijay
+Record updated
+Enter Your choice 
+1 Insert
+2 Update
+3 Delete
+4 Display
+5 Exit
+2
+Enter Roll No to update
+555
+Enter Name
+Vinay
+Record updated
+Enter Your choice 
+1 Insert
+2 Update
+3 Delete
+4 Display
+5 Exit
+3
+Enter Roll No to update
+1
+Record Deleted
+Enter Your choice 
+1 Insert
+2 Update
+3 Delete
+4 Display
+5 Exit
+5
+Thank You
+
