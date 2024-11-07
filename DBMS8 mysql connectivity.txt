@@ -1,0 +1,218 @@
+package sample;
+import java.sql.*;
+import java.util.*;
+import java.io.*;
+public class New {
+	public static void main(String arg[])
+	{
+	try{
+	Class.forName("com.mysql.cj.jdbc.Driver");
+Connection conn=DriverManager.getConnection("jdbc:mysql://localhost:3306/te_a3_13155","root","root");
+			PreparedStatement stm=null;
+			Statement stmt=conn.createStatement();
+			int ch;
+			Scanner sc=new Scanner(System.in);
+		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+ 
+			do{
+				int r;
+				String n = null;
+				System.out.println("Enter Your choice \n1 Insert\n2 Update\n3 Delete\n4 Display\n5 Exit");
+				ch=sc.nextInt();
+				switch(ch)
+				{
+					case 1:
+						System.out.println("Enter Roll No");
+						r=Integer.parseInt(br.readLine());
+						System.out.println("Enter Name");
+						n=br.readLine();
+ 
+		String sql = "insert into student "+ " (roll,name)" + " values (?, ?)";
+						stm = conn.prepareStatement(sql);
+ 
+						// set param values
+						stm.setInt(1, r);
+				        stm.setString(2, n);
+ 
+						// 3. Execute SQL query
+						stm.executeUpdate();
+ 
+						break;
+					case 2:
+						System.out.println("Enter Roll No to update");
+						r=Integer.parseInt(br.readLine());
+						System.out.println("Enter Name");
+						n=br.readLine();
+				 String query = "update student set name=? where roll=? ";
+				         stm = conn.prepareStatement(query);
+				         stm.setString(1, n);
+				         stm.setInt(2, r);
+				         stm.executeUpdate();
+						System.out.println("Record updated");
+						break;
+					case 3:
+						System.out.println("Enter Roll No to update");
+						r=Integer.parseInt(br.readLine());
+ 
+					String sql1="DELETE FROM student WHERE roll=?";
+						stm= conn.prepareStatement(sql1);
+						stm.setInt(1, r);
+						stm.execute();
+						System.out.println("Record Deleted");
+ 
+						break;
+					case 4:
+
+				String qr= "SELECT * FROM student ORDER BY roll";
+						ResultSet rs=stmt.executeQuery(qr);
+						while(rs.next())
+						{
+							r=rs.getInt("roll");
+							n=rs.getString("name");
+						System.out.println("Roll No:"+r+ "\tName:"+n);
+						}
+						break;
+ 
+					case 5:System.out.println("Thank You");
+ 
+						break;
+					default:System.out.println("Invalid Choice");
+ 
+				}
+			}while(ch!=5);
+			stmt.close();
+			conn.close();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+	}}
+Output:
+Enter Your choice 
+1 Insert
+2 Update
+3 Delete
+4 Display
+5 Exit
+1
+Enter Roll No
+11
+Enter Name
+vijay
+Enter Your choice 
+1 Insert
+2 Update
+3 Delete
+4 Display
+5 Exit
+1
+Enter Roll No
+12
+Enter Name
+rishi
+Enter Your choice 
+1 Insert
+2 Update
+3 Delete
+4 Display
+5 Exit
+1
+Enter Roll No
+13
+Enter Name
+Smita
+Enter Your choice 
+1 Insert
+2 Update
+3 Delete
+4 Display
+5 Exit
+1
+Enter Roll No
+18
+Enter Name
+yash
+Enter Your choice 
+1 Insert
+2 Update
+3 Delete
+4 Display
+5 Exit
+2
+Enter Roll No to update
+17
+Enter Name
+rachi
+Record updated
+Enter Your choice 
+1 Insert
+2 Update
+3 Delete
+4 Display
+5 Exit
+4
+Roll No:11	Name:vijay
+Roll No:12	Name:rishi
+Roll No:13	Name:Smita
+Roll No:17	Name:rachi
+Enter Your choice 
+1 Insert
+2 Update
+3 Delete
+4 Display
+5 Exit
+3
+Enter Roll No to update
+11
+Record Deleted
+Enter Your choice 
+1 Insert
+2 Update
+3 Delete
+4 Display
+5 Exit
+4
+Roll No:12	Name:rishi
+Roll No:15	Name:Smita
+Roll No:18	Name:rachi
+Enter Your choice 
+1 Insert
+2 Update
+3 Delete
+4 Display
+5 Exit
+5
+Thank You
+Connection:
+package sample;
+import java.sql.*;
+public class DBMS {
+	
+	    public static final String DBURL = "jdbc:mysql://localhost:3306/te_a3_13155";
+	    public static final String DBUSER = "root";
+	    public static final String DBPASS = "root";
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		try
+		{
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		System.out.println("Driver is loaded successfully");
+		Connection con = DriverManager.getConnection(DBURL, DBUSER, DBPASS);			
+		System.out.println("Connection is establish");
+
+		}
+		catch(Exception e)
+				{
+			System.out.println(e);
+		}
+	}
+
+}
+output:
+Driver is loaded successfully
+Connection is establish
+
+
