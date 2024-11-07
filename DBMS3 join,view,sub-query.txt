@@ -1,0 +1,186 @@
+Microsoft Windows [Version 10.0.22631.4391]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Program Files\MySQL\MySQL Server 8.0\bin>mysql -u root -p
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 25
+Server version: 8.0.39 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| emp                |
+| info               |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+6 rows in set (0.00 sec)
+
+mysql> use info;
+Database changed
+mysql> create table product(product_id int(30) primary key,prod_name varchar(40),supplier_id int(10),category_id int(20),price int(30));
+Query OK, 0 rows affected, 4 warnings (0.04 sec)
+
+mysql> insert into product values(1,'ram',1,2,320),(2,'ravi',3,4,4000),(3,'darshan',4,3,5000),(4,'tanmay',5,3,200),(5,'yash',6,5,4000);
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select*from product;
++------------+-----------+-------------+-------------+-------+
+| product_id | prod_name | supplier_id | category_id | price |
++------------+-----------+-------------+-------------+-------+
+|          1 | ram       |           1 |           2 |   320 |
+|          2 | ravi      |           3 |           4 |  4000 |
+|          3 | darshan   |           4 |           3 |  5000 |
+|          4 | tanmay    |           5 |           3 |   200 |
+|          5 | yash      |           6 |           5 |  4000 |
++------------+-----------+-------------+-------------+-------+
+5 rows in set (0.00 sec)
+
+mysql>  create table order_details(orderDetail_id int(10),orderID int(40),product_id int(20),Quantity int(30));
+Query OK, 0 rows affected, 4 warnings (0.03 sec)
+
+mysql> insert into order_details values(1,33004,2,12),(2,234543,4,10),(3,45433,3,15),(5,76543,5,34);
+Query OK, 4 rows affected (0.01 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select*from order_details;
++----------------+---------+------------+----------+
+| orderDetail_id | orderID | product_id | Quantity |
++----------------+---------+------------+----------+
+|              1 |   33004 |          2 |       12 |
+|              2 |  234543 |          4 |       10 |
+|              3 |   45433 |          3 |       15 |
+|              5 |   76543 |          5 |       34 |
++----------------+---------+------------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select product.product_id,product.prod_name,order_details.orderID from product left join order_details on product.product_id=order_details.product_id
+;
++------------+-----------+---------+
+| product_id | prod_name | orderID |
++------------+-----------+---------+
+|          1 | ram       |    NULL |
+|          2 | ravi      |   33004 |
+|          3 | darshan   |   45433 |
+|          4 | tanmay    |  234543 |
+|          5 | yash      |   76543 |
++------------+-----------+---------+
+5 rows in set (0.00 sec)
+
+mysql> select product.product_id,product.prod_name,order_details.orderID from product RIGHT JOIN order_details on product.product_id=order_details.product_i
+d;
++------------+-----------+---------+
+| product_id | prod_name | orderID |
++------------+-----------+---------+
+|          2 | ravi      |   33004 |
+|          4 | tanmay    |  234543 |
+|          3 | darshan   |   45433 |
+|          5 | yash      |   76543 |
++------------+-----------+---------+
+4 rows in set (0.00 sec)
+mysql> select product.product_id,product.prod_name,order_details.orderID from product CROSS JOIN order_details on product.product_id=order_details.product_i
+d;
++------------+-----------+---------+
+| product_id | prod_name | orderID |
++------------+-----------+---------+
+|          2 | ravi      |   33004 |
+|          4 | tanmay    |  234543 |
+|          3 | darshan   |   45433 |
+|          5 | yash      |   76543 |
++------------+-----------+---------+
+4 rows in set (0.00 sec)
+
+mysql> select prod_name from product where product_id=ANY(select product_id from order_details where Quantity=10);
++-----------+
+| prod_name |
++-----------+
+| tanmay    |
++-----------+
+1 row in set (0.01 sec)
+
+mysql> select prod_name from product where product_id=ANY(select product_id from order_details where Quantity>10);
++-----------+
+| prod_name |
++-----------+
+| ravi      |
+| darshan   |
+| yash      |
++-----------+
+3 rows in set (0.00 sec)
+
+mysql> select All prod_name from product where TRUE;
++-----------+
+| prod_name |
++-----------+
+| ram       |
+| ravi      |
+| darshan   |
+| tanmay    |
+| yash      |
++-----------+
+5 rows in set (0.00 sec)
+
+mysql> select*from product where product_id=ANY(select product_id from order_details);
++------------+-----------+-------------+-------------+-------+
+| product_id | prod_name | supplier_id | category_id | price |
++------------+-----------+-------------+-------------+-------+
+|          2 | ravi      |           3 |           4 |  4000 |
+|          4 | tanmay    |           5 |           3 |   200 |
+|          3 | darshan   |           4 |           3 |  5000 |
+|          5 | yash      |           6 |           5 |  4000 |
++------------+-----------+-------------+-------------+-------+
+4 rows in set (0.00 sec)
+
+mysql> create view v12 as select prod_name,price from product;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select*from v12;
++-----------+-------+
+| prod_name | price |
++-----------+-------+
+| ram       |   320 |
+| ravi      |  4000 |
+| darshan   |  5000 |
+| tanmay    |   200 |
+| yash      |  4000 |
++-----------+-------+
+5 rows in set (0.00 sec)
+
+mysql> select*from product;
++------------+-----------+-------------+-------------+-------+
+| product_id | prod_name | supplier_id | category_id | price |
++------------+-----------+-------------+-------------+-------+
+|          1 | ram       |           1 |           2 |   320 |
+|          2 | ravi      |           3 |           4 |  4000 |
+|          3 | darshan   |           4 |           3 |  5000 |
+|          4 | tanmay    |           5 |           3 |   200 |
+|          5 | yash      |           6 |           5 |  4000 |
++------------+-----------+-------------+-------------+-------+
+5 rows in set (0.00 sec)
+
+mysql> select*from product;
++------------+-----------+-------------+-------------+-------+
+| product_id | prod_name | supplier_id | category_id | price |
++------------+-----------+-------------+-------------+-------+
+|          1 | ram       |           1 |           2 |   320 |
+|          2 | ravi      |           3 |           4 |  4000 |
+|          3 | darshan   |           4 |           3 |  5000 |
+|          4 | tanmay    |           5 |           3 |   200 |
+|          5 | yash      |           6 |           5 |  4000 |
++------------+-----------+-------------+-------------+-------+
+5 rows in set (0.00 sec)
+
+mysql>
