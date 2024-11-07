@@ -1,0 +1,79 @@
+program code:
+DECLARE
+CURSOR c1 is select * from employee for update;
+eid int;
+ename varchar(20);
+sal float;
+did int;
+begin
+OPEN c1;
+LOOP
+fetch c1 into eid,ename,sal,did;
+exit when c1%NOTFOUND;
+update employee
+set sal = sal + 100
+where current of c1;
+end loop;
+close c1;
+commit;
+for element in (select * from employee) loop
+DBMS_OUTPUT.PUT_LINE(element.eid || ' ' ||  element.ename || ' ' || element.sal||' ' || element.deptid);
+end loop;
+end;
+/
+
+declare
+cursor c1 is select * from employee;
+begin
+for row in c1
+loop
+dbms_output.put_line(row.eid||' '||row.ename||' '||row.sal||' '||row.deptid);
+end loop;
+end;
+/
+
+output
+SQL*Plus: Release 21.0.0.0.0 - Production on Fri Aug 23 23:34:48 2024
+Version 21.3.0.0.0
+
+Copyright (c) 1982, 2021, Oracle.  All rights reserved.
+
+Enter user-name: system
+Enter password:
+Last Successful login time: Fri Aug 09 2024 18:41:12 +05:30
+
+Connected to:
+Oracle Database 21c Express Edition Release 21.0.0.0.0 - Production
+Version 21.3.0.0.0
+
+SQL> create table employee(eid int,ename varchar(20),sal float,deptid int);
+
+Table created.
+
+SQL> insert into employee values(1,'omkar',500,111);
+
+1 row created.
+
+SQL> insert into employee values(2,'ganesh',60000,222);
+
+1 row created.
+
+SQL> insert into employee values(3,'mohan',80000,333);
+
+1 row created.
+
+SQL> set serveroutput on
+
+SQL> @updatecursor.sql
+1 omkar 600 111
+2 ganesh 60100 222
+3 mohan 80100 333
+
+PL/SQL procedure successfully completed.
+SQL> @cursorforloop.sql
+1 omkar 700 111
+2 ganesh 60200 222
+3 mohan 80200 333
+
+PL/SQL procedure successfully completed.
+
