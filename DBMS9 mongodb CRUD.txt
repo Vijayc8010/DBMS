@@ -1,0 +1,139 @@
+
+
+MongoDB QUeries:Design and Develop MongoDB Queries using CRUD operations.
+OUTPUT:
+
+Please enter a MongoDB connection string (Default: mongodb://localhost/): mongo
+mongo
+Current Mongosh Log ID: 67102259ea7d28f3da86b01c
+Connecting to:          mongodb://127.0.0.1:27017/mongo?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.3.2
+Using MongoDB:          8.0.1
+Using Mongosh:          2.3.2
+
+For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+
+------
+   The server generated these startup warnings when booting
+   2024-10-16T23:03:58.680+05:30: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+------
+
+mongo> use stu_details
+switched to db stu_details
+stu_details> db.stu_details.insertMany({name: "Vijay", age: 20, city: "Pune"});
+MongoInvalidArgumentError: Argument "docs" must be an array of documents
+stu_details> db.stu_details.insertMany([{name: "Vijay", age: 20, city: "Pune"},{name: "Om", city: "Mumbai"}]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('671022ffea7d28f3da86b01d'),
+    '1': ObjectId('671022ffea7d28f3da86b01e')
+  }
+}
+stu_details> db.stu_details.find().pretty()
+[
+  {
+    _id: ObjectId('671022ffea7d28f3da86b01d'),
+    name: 'Vijay',
+    age: 20,
+    city: 'Pune'
+  },
+  {
+    _id: ObjectId('671022ffea7d28f3da86b01e'),
+    name: 'Om',
+    city: 'Mumbai'
+  }
+]
+stu_details> db.stu_details.updateOne({name: "Vijay"}, {$set: {age: 21}});
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+stu_details> db.stu_details.updateMany({city: "Mumbai"}, {$set: {city: "London"}});
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+stu_details> db.stu_details.find().pretty()
+[
+  {
+    _id: ObjectId('671022ffea7d28f3da86b01d'),
+    name: 'Vijay',
+    age: 21,
+    city: 'Pune'
+  },
+  {
+    _id: ObjectId('671022ffea7d28f3da86b01e'),
+    name: 'Om',
+    city: 'London'
+  }
+]
+stu_details> db.stu_details.deleteOne({name: "Romaan"});
+{ acknowledged: true, deletedCount: 0 }
+stu_details> db.stu_details.find().pretty()
+[
+  {
+    _id: ObjectId('671022ffea7d28f3da86b01d'),
+    name: 'Vijay',
+    age: 21,
+    city: 'Pune'
+  },
+  {
+    _id: ObjectId('671022ffea7d28f3da86b01e'),
+    name: 'Om',
+    city: 'London'
+  }
+]
+
+stu_details> db.stu_details.find({$or: [{age: {$lt: 25}}, {city: "Pune"}]});
+[
+  {
+    _id: ObjectId('671022ffea7d28f3da86b01d'),
+    name: 'Vijay',
+    age: 21,
+    city: 'Pune'
+  }
+]
+stu_details> db.stu_details.find({age: {$not: {$gt: 20}}});
+[
+  {
+    _id: ObjectId('671022ffea7d28f3da86b01e'),
+    name: 'Om',
+    city: 'London'
+  }
+]
+
+
+stu_details> db.stu_details.find({$and: [{age: {$gt: 22}}, {city: "Pune"}]});
+
+stu_details> db.stu_details.find({$and: [{age: {$gt: 20}}, {city: "Pune"}]});
+[
+  {
+    _id: ObjectId('671022ffea7d28f3da86b01d'),
+    name: 'Vijay',
+    age: 21,
+    city: 'Pune'
+  }
+]
+stu_details> db.stu_details.find({age: {$not: {$gt: 20}}});
+[
+  {
+    _id: ObjectId('671022ffea7d28f3da86b01e'),
+    name: 'Om',
+    city: 'London'
+  }
+]
+stu_details> db.stu_details.find({$nor: [{age: {$lt: 25}}, {city: "Mumbai"}]});
+[
+  {
+    _id: ObjectId('671022ffea7d28f3da86b01e'),
+    name: 'Om',
+    city: 'London'
+  }
+]
+stu_details>
