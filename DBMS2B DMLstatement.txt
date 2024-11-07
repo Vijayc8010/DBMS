@@ -1,0 +1,177 @@
+Microsoft Windows [Version 10.0.22631.4391]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Program Files\MySQL\MySQL Server 8.0\bin>mysql -u root -p
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 20
+Server version: 8.0.39 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| emp                |
+| info               |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+6 rows in set (0.00 sec)
+
+mysql> use emp;
+Database changed
+mysql> create table emp_info(emp_id int(30) primary key,emp_name varchar(40),emp_salary int(40),address varchar(50));
+Query OK, 0 rows affected, 2 warnings (0.03 sec)
+
+mysql> desc emp_info;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| emp_id     | int         | NO   | PRI | NULL    |       |
+| emp_name   | varchar(40) | YES  |     | NULL    |       |
+| emp_salary | int         | YES  |     | NULL    |       |
+| address    | varchar(50) | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> insert into emp_info values(101,'Amay',45000,'pune'),(102,'avi',50000,'chinchwad'),(103,'sunny',43000,'noida'),(104,'arnav',65000,'mumbai');
+Query OK, 4 rows affected (0.01 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select*from emp_info;
++--------+----------+------------+-----------+
+| emp_id | emp_name | emp_salary | address   |
++--------+----------+------------+-----------+
+|    101 | Amay     |      45000 | pune      |
+|    102 | avi      |      50000 | chinchwad |
+|    103 | sunny    |      43000 | noida     |
+|    104 | arnav    |      65000 | mumbai    |
++--------+----------+------------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> delete from emp_info where address='noida';
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select*from emp_info;
++--------+----------+------------+-----------+
+| emp_id | emp_name | emp_salary | address   |
++--------+----------+------------+-----------+
+|    101 | Amay     |      45000 | pune      |
+|    102 | avi      |      50000 | chinchwad |
+|    104 | arnav    |      65000 | mumbai    |
++--------+----------+------------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> update emp_info set emp_name='vijay' where emp_id=101;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select*from emp_info;
++--------+----------+------------+-----------+
+| emp_id | emp_name | emp_salary | address   |
++--------+----------+------------+-----------+
+|    101 | vijay    |      45000 | pune      |
+|    102 | avi      |      50000 | chinchwad |
+|    104 | arnav    |      65000 | mumbai    |
++--------+----------+------------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> select address,emp_name from emp_info;
++-----------+----------+
+| address   | emp_name |
++-----------+----------+
+| pune      | vijay    |
+| chinchwad | avi      |
+| mumbai    | arnav    |
++-----------+----------+
+3 rows in set (0.00 sec)
+
+mysql> select*from emp_info order by emp_name ASC;
++--------+----------+------------+-----------+
+| emp_id | emp_name | emp_salary | address   |
++--------+----------+------------+-----------+
+|    104 | arnav    |      65000 | mumbai    |
+|    102 | avi      |      50000 | chinchwad |
+|    101 | vijay    |      45000 | pune      |
++--------+----------+------------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> select*from emp_info where emp_name like '%v';
++--------+----------+------------+---------+
+| emp_id | emp_name | emp_salary | address |
++--------+----------+------------+---------+
+|    104 | arnav    |      65000 | mumbai  |
++--------+----------+------------+---------+
+1 row in set (0.00 sec)
+
+mysql> select*from emp_info where emp_name like 'a%';
++--------+----------+------------+-----------+
+| emp_id | emp_name | emp_salary | address   |
++--------+----------+------------+-----------+
+|    102 | avi      |      50000 | chinchwad |
+|    104 | arnav    |      65000 | mumbai    |
++--------+----------+------------+-----------+
+2 rows in set (0.00 sec)
+
+mysql> select distinct emp_id from emp_info;
++--------+
+| emp_id |
++--------+
+|    101 |
+|    102 |
+|    104 |
++--------+
+3 rows in set (0.00 sec)
+
+mysql> select emp_name from emp_info where emp_name in('avi','arnav');
++----------+
+| emp_name |
++----------+
+| avi      |
+| arnav    |
++----------+
+2 rows in set (0.00 sec)
+
+mysql> select avg(emp_salary) from emp_info;
++-----------------+
+| avg(emp_salary) |
++-----------------+
+|      53333.3333 |
++-----------------+
+1 row in set (0.01 sec)
+
+mysql> select min(emp_salary) from emp_info;
++-----------------+
+| min(emp_salary) |
++-----------------+
+|           45000 |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> select max(emp_salary) from emp_info;
++-----------------+
+| max(emp_salary) |
++-----------------+
+|           65000 |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> select count(emp_salary)from emp_info;
++-------------------+
+| count(emp_salary) |
++-------------------+
+|                 3 |
++-------------------+
+1 row in set (0.00 sec)
+
+mysql>
