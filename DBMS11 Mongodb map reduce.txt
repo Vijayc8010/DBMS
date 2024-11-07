@@ -1,0 +1,106 @@
+
+
+
+*******************************Question****************************
+
+MongoDB - Map reduces operations: Implement Map reduces operation with suitable example using MongoDB.
+OUTPUT:
+
+Please enter a MongoDB connection string (Default: mongodb://localhost/): mongo
+mongo
+Current Mongosh Log ID: 67102bf33931af171186b01c
+Connecting to:          mongodb://127.0.0.1:27017/mongo?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.3.2
+Using MongoDB:          8.0.1
+Using Mongosh:          2.3.2
+
+For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+
+------
+   The server generated these startup warnings when booting
+   2024-10-16T23:03:58.680+05:30: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+------
+
+mongo> show dbs
+admin         40.00 KiB
+config       108.00 KiB
+customer      60.00 KiB
+local         72.00 KiB
+stu_details   56.00 KiB
+mongo> use payment_status
+switched to db payment_status
+
+******************INSERT***************************
+
+payment_status> db.stat.insertMany([{C_id: "VIJAY20", Product: "Dark Chocolate", Amount: 150, Status: "Paid"}, {C_id: "VIJAY20", Product: "Choco Bakes", Amount: 145, Status: "Not Paid"}, {C_id: "VIJAY20", Product: "Ramen", Amount: 225, Status: "Paid"}, {C_id: "VIJAY20", Product: "Wine", Amount: 11500, Status: "Paid"}, {C_id: "VIJAY20", Product: "Biscuits", Amount: 475, Status: "Paid"}]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('67102d643931af171186b01d'),
+    '1': ObjectId('67102d643931af171186b01e'),
+    '2': ObjectId('67102d643931af171186b01f'),
+    '3': ObjectId('67102d643931af171186b020'),
+    '4': ObjectId('67102d643931af171186b021')
+  }
+}
+payment_status> db.stat,find().pretty()
+ReferenceError: find is not defined
+payment_status> db.stat.find().pretty()
+[
+  {
+    _id: ObjectId('67102d643931af171186b01d'),
+    C_id: 'VIJAY20',
+    Product: 'Dark Chocolate',
+    Amount: 150,
+    Status: 'Paid'
+  },
+  {
+    _id: ObjectId('67102d643931af171186b01e'),
+    C_id: 'VIJAY20',
+    Product: 'Choco Bakes',
+    Amount: 145,
+    Status: 'Not Paid'
+  },
+  {
+    _id: ObjectId('67102d643931af171186b01f'),
+    C_id: 'VIJAY20',
+    Product: 'Ramen',
+    Amount: 225,
+    Status: 'Paid'
+  },
+  {
+    _id: ObjectId('67102d643931af171186b020'),
+    C_id: 'VIJAY20',
+    Product: 'Wine',
+    Amount: 11500,
+    Status: 'Paid'
+  },
+  {
+    _id: ObjectId('67102d643931af171186b021'),
+    C_id: 'VIJAY20',
+    Product: 'Biscuits',
+    Amount: 475,
+    Status: 'Paid'
+  }
+]
+
+********************MAPREDUCE*****************************
+
+payment_status> db.stat.mapReduce(function(){emit(this.C_id, this.Amazon);}, function(key,values){return Array.sum(values)}, {query: {"Status": "Not Paid"}, out: "Bill_Amount"})
+DeprecationWarning: Collection.mapReduce() is deprecated. Use an aggregation instead.
+See https://docs.mongodb.com/manual/core/map-reduce for details.
+{ result: 'Bill_Amount', ok: 1 }
+payment_status> var mapfun1=function(){emit(this.C_id, this.Amount);};
+
+payment_status> var reducefun1=function(keyC_id, valueAmount){return Array.sum(valueAmount);};
+
+payment_status> db.stat.mapReduce(mapFun1, reducefun1,{out: "Map"})
+ReferenceError: mapFun1 is not defined
+payment_status> db.stat.mapReduce(mapfun1, reducefun1,{out: "Map"})
+{ result: 'Map', ok: 1 }
+payment_status> db.Bill_Amount.find().pretty()
+[ { _id: 'VIJAY20', value: null } ]
+payment_status> db.stat.mapReduce(function(){emit(this.C, this.Amazon);}, function(key, values){return Array.sum(values)}, {query: {"Status": "Not Paid"}, out: "Bill_Amount"})
+{ result: 'Bill_Amount', ok: 1 }
+payment_status> db.Bill_Amount.find().pretty()
+[ { _id: null, value: null } ]
+payment_status>
