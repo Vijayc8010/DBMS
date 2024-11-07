@@ -1,0 +1,107 @@
+Program Code:
+create or replace procedure grademark(m IN int,g OUT varchar)
+as 
+begin
+if m<=1500 and m>=990 then
+g:='Dist';
+elsif m<=989 and m>=900 then
+g:='First';
+elsif m<=899 and m>=825 then
+g:='Second';
+else
+g:='Fail';
+end if;
+end;
+/
+declare
+r int;
+n varchar(20);
+m int;
+g varchar(20);
+begin r:=&r;
+select rollno,name,mark into r,n,m from student1 where rollno=r;
+grademark(m,g);
+insert into grade1 values(r,n,g);
+Exception
+when NO_DATA_FOUND then
+dbms_output.put_line('invalid rollno');
+end;
+/
+
+Output:
+SQL*Plus: Release 21.0.0.0.0 - Production on Wed Aug 21 09:59:38 2024
+Version 21.3.0.0.0
+
+Copyright (c) 1982, 2021, Oracle.  All rights reserved.
+
+Enter user-name: system
+Enter password:
+ERROR:
+ORA-28001: the password has expired
+
+
+Changing password for system
+New password:
+Retype new password:
+Password changed
+
+Connected to:
+Oracle Database 21c Express Edition Release 21.0.0.0.0 - Production
+Version 21.3.0.0.0
+
+SQL> create table student(rollno int, name varchar(20),mark int);
+create table student(rollno int, name varchar(20),mark int)
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object
+
+
+SQL> create table student1(rollno int, name varchar(20),mark int);
+
+Table created.
+
+SQL> create table grade1(rollno int, name varchar(20),grade varchar(20));
+
+Table created.
+SQL> insert into student1 values(1,'aditya',1500);
+
+1 row created.
+
+SQL> insert into student1 values(2,'ram',955);
+
+1 row created.
+
+SQL> insert into student1 values(3,'mahesh',852);
+
+1 row created.
+
+SQL> set serveroutput on
+SQL> @grade_calc.sql;
+
+Warning: Procedure created with compilation errors.
+
+SQL> @grade_calc.sql;
+
+Procedure created.
+
+SQL> @grade_calc.sql;
+
+Warning: Procedure created with compilation errors.
+
+SQL> @grade_calc.sql;
+
+Procedure created.
+
+SQL> @a5.sql
+Enter value for r: 2
+old   6: begin r:=&r;
+new   6: begin r:=2;
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from grade1;
+
+    ROLLNO NAME                 GRADE
+---------- -------------------- --------------------
+         2 omkar                  First
+
